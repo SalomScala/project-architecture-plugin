@@ -26,7 +26,7 @@ plugins {
 }
 apply plugin: 'eclipse'
 
-group = 'project-architecture-plugin'
+group = 'de.salomscala.projectarchitectureplugin'
 version = 0.2
 
 sourceCompatibility = 1.8
@@ -47,7 +47,7 @@ bintray {
     publications = ['nebula']
     pkg {
         repo = 'Projects'
-        name = 'projectarchitecture'
+        name = 'projectarchitectureplugin'
         desc  = "${project.description}"
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/SalomScala/project-architecture-plugin.git'
@@ -68,7 +68,7 @@ gradlePlugin {
     plugins {
         simplePlugin {
             id = 'projectarchitectureplugin'
-            implementationClass = 'com.projectarchitecturedescription.plugin.ProjectArchitectureDescriptionPlugin'
+            implementationClass = 'de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionPlugin'
         }
     }
 }
