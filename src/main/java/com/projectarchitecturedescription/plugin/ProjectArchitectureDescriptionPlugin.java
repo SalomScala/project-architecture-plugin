@@ -25,22 +25,22 @@ import com.projectarchitecturedescription.plugin.rules.ListRulesTask;
 
 public class ProjectArchitectureDescriptionPlugin implements Plugin<Project> {
 	private static final String EXTENSION_NAME = "projectArchitectureDescription";
-	
+
 	@Override
 	public void apply(final Project project) {
 		final ProjectArchitectureDescriptionExtension extension =
 				project.getExtensions().create(EXTENSION_NAME, ProjectArchitectureDescriptionExtension.class, project.getObjects());
-		
-		final ListDimensionsTask listDimensionsTask = project.getTasks().create("listDimensions", ListDimensionsTask.class, extension.getDimensions());
-		final ApplyDimensionsTask applyDimensionsTask = project.getTasks().create("applyDimensions", ApplyDimensionsTask.class, extension.getDimensions());
+
+		final ListDimensionsTask listDimensionsTask = project.getTasks().create("listDimensions", ListDimensionsTask.class);
+		final ApplyDimensionsTask applyDimensionsTask = project.getTasks().create("applyDimensions", ApplyDimensionsTask.class);
 		listDimensionsTask.mustRunAfter(applyDimensionsTask);
-		final ListRulesTask listRulesTask = project.getTasks().create("listRules", ListRulesTask.class, extension.getRules());
-		final ApplyRulesTask applyRulesTask = project.getTasks().create("applyRules", ApplyRulesTask.class, extension.getRules());
+		final ListRulesTask listRulesTask = project.getTasks().create("listRules", ListRulesTask.class);
+		final ApplyRulesTask applyRulesTask = project.getTasks().create("applyRules", ApplyRulesTask.class);
 		listRulesTask.mustRunAfter(applyRulesTask);
 		applyRulesTask.dependsOn(applyDimensionsTask);
 		final ApplyBuildDependenciesTask applyBuildDependenciesTask =
-				project.getTasks().create("applyBuildDependencies", ApplyBuildDependenciesTask.class, extension.getBuildDependencies());
-		final CheckRulesTask checkRulesTask = project.getTasks().create("checkRules", CheckRulesTask.class, extension.getRules(), extension.getBuildDependencies());
+				project.getTasks().create("applyBuildDependencies", ApplyBuildDependenciesTask.class);
+		final CheckRulesTask checkRulesTask = project.getTasks().create("checkRules", CheckRulesTask.class);
 		checkRulesTask.dependsOn(applyRulesTask);
 		checkRulesTask.dependsOn(applyBuildDependenciesTask);
 	}

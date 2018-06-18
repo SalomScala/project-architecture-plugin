@@ -15,13 +15,19 @@
 
 plugins {
     id 'com.gradle.plugin-publish' version '0.9.4'
-    id 'nebula.plugin-plugin' version '4.24.2'
     id 'java-gradle-plugin'
+    id 'nebula.facet' version '4.0.1'
+    id 'nebula.info' version '3.7.1'
+    id 'nebula.source-jar' version '8.0.0'
+    id 'nebula.javadoc-jar' version '8.0.0'
+    id 'nebula.maven-publish' version '8.0.0'
+    id "com.jfrog.bintray" version "1.8.1" //1.8.2
+    
 }
 apply plugin: 'eclipse'
 
-group = 'project-architecture'
-version = 0.1
+group = 'project-architecture-plugin'
+version = 0.2
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -33,26 +39,35 @@ eclipse {
     }
 }
 
-dependencies {
-    testCompile 'commons-lang:commons-lang:2.6'
-}
-
 description 'Gradle plugin for providing rules for the architecture of project dependencies'
-/**
-pluginBundle {
-    plugins {
-        projctarchitecture {
-            id = 'projectarchitecture'
-            displayName = 'Project Architectur Plugin'
-            description = project.description
+
+bintray {
+    user = project.hasProperty('bintray.user') ? project.property('bintray.user') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintray.key') ? project.property('bintray.key') : System.getenv('BINTRAY_KEY')
+    publications = ['nebula']
+    pkg {
+        repo = 'Projects'
+        name = 'projectarchitecture'
+        desc  = "${project.description}"
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/SalomScala/project-architecture-plugin.git'
+        websiteUrl = 'https://github.com/SalomScala/project-architecture-plugin'
+        issueTrackerUrl = 'https://github.com/SalomScala/project-architecture-plugin/issues'
+        publicDownloadNumbers = true
+        githubRepo = 'SalomScala/project-architecture-plugin'
+        githubReleaseNotesFile = 'README.md'
+        version {
+            name = "${project.version}"
+            desc = 'Test Version'
+            released  = new Date()
         }
     }
 }
-**/
+
 gradlePlugin {
     plugins {
         simplePlugin {
-            id = 'projectarchitecture'
+            id = 'projectarchitectureplugin'
             implementationClass = 'com.projectarchitecturedescription.plugin.ProjectArchitectureDescriptionPlugin'
         }
     }
