@@ -11,7 +11,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
- 
 
 plugins {
     id 'com.gradle.plugin-publish' version '0.9.4'
@@ -24,6 +23,10 @@ plugins {
     id "com.jfrog.bintray" version "1.8.1" //1.8.2
     
 }
+
+defaultTasks 'clean', 'javadoc', 'test', 'check', 'assemble'
+
+
 apply plugin: 'eclipse'
 
 group = 'de.salomscala.projectarchitectureplugin'
