@@ -13,7 +13,9 @@
  *******************************************************************************/
 package de.salomscala.projectarchitectureplugin.plugin.util;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.gradle.api.DomainObjectSet;
@@ -55,11 +57,12 @@ public class Task {
 
     public Dependencies calculateTransitiveDependencies() {
         final Set<Dependency> dependencies = new LinkedHashSet<>();
-        calculateTransitiveDependencies(new ProjectElement(this.task.getProject()), new LinkedHashSet<>(),
-                dependencies);
+        calculateTransitiveDependencies(new ProjectElement(this.task.getProject()), new ArrayList<ProjectElement>(),
+                new LinkedHashSet<>(), dependencies);
         return new Dependencies(dependencies);
     }
 
+    @Deprecated
     private static void calculateDirectDependencies(final ProjectElement from, final Set<Dependency> dependencies) {
         from.getProject().getConfigurations().all((final Configuration c) -> {
             final DomainObjectSet<org.gradle.api.artifacts.ProjectDependency> projectDependencies = c.getDependencies()
@@ -74,8 +77,15 @@ public class Task {
         });
     }
 
-    private static void calculateTransitiveDependencies(final ProjectElement actual,
+    private static void calculateTransitiveDependencies(final ProjectElement actual, final List<ProjectElement> done,
             final Set<ProjectElement> fromElements, final Set<Dependency> dependencies) {
+
+        if (done.contains(actual)) {
+            return;
+        }
+
+        done.add(actual);
+
         actual.getProject().getConfigurations().all((final Configuration c) -> {
             final DomainObjectSet<org.gradle.api.artifacts.ProjectDependency> projectDependencies = c.getDependencies()
                     .withType(org.gradle.api.artifacts.ProjectDependency.class);
@@ -86,7 +96,7 @@ public class Task {
                 final Set<ProjectElement> newFromElements = new LinkedHashSet<>();
                 newFromElements.add(actual);
                 newFromElements.addAll(fromElements);
-                calculateTransitiveDependencies(new ProjectElement(p2.getDependencyProject()), newFromElements,
+                calculateTransitiveDependencies(new ProjectElement(p2.getDependencyProject()), done, newFromElements,
                         dependencies);
             });
         });
