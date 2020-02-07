@@ -30,7 +30,7 @@ defaultTasks 'clean', 'javadoc', 'test', 'check', 'assemble'
 apply plugin: 'eclipse'
 
 group = 'de.salomscala.projectarchitectureplugin'
-version = 0.2
+version = 0.3
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
