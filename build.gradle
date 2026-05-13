@@ -20,7 +20,6 @@ plugins {
     id 'com.netflix.nebula.source-jar' version '23.1.0'
     id 'com.netflix.nebula.javadoc-jar' version '23.1.0'
     id 'com.netflix.nebula.maven-publish' version '23.1.0'
-    id 'signing'
 }
 
 group = 'de.salomscala.projectarchitectureplugin'
@@ -76,6 +75,16 @@ gradlePlugin {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = 'JFrog'
+            url = project.findProperty('artifactory_extrelease_contextUrl')
+            credentials {
+                username = project.findProperty('artifactory_user') ?: System.getenv('ARTIFACTORY_USER')
+                password = project.findProperty('artifactory_password') ?: System.getenv('ARTIFACTORY_PASSWORD')
+            }
+        }
+    }
     publications {
         mavenJava(MavenPublication) {
             from components.java
@@ -97,9 +106,4 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    required { gradle.taskGraph.hasTask("publish") }
-    sign publishing.publications.mavenJava
 }
