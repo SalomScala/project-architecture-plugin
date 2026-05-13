@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,16 @@ package de.salomscala.projectarchitectureplugin.plugin.dependencies;
 
 import org.gradle.api.Project;
 
+/**
+ * An element representing a Gradle project.
+ */
 public class ProjectElement implements Element {
 
+    /**
+     * Constructor for a project element.
+     *
+     * @param project The Gradle project represented by this element.
+     */
     public ProjectElement(final Project project) {
         super();
         this.project = project;
@@ -24,6 +32,11 @@ public class ProjectElement implements Element {
 
     private final Project project;
 
+    /**
+     * Returns the underlying Gradle project.
+     *
+     * @return The {@link Project} object.
+     */
     public Project getProject() {
         return this.project;
     }

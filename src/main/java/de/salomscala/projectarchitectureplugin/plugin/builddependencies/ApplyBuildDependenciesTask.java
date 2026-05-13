@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,10 +20,18 @@ import org.gradle.api.DefaultTask;
 import de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionExtension;
 import de.salomscala.projectarchitectureplugin.plugin.util.Task;
 
+/**
+ * Task for applying build dependencies.
+ * Calculates transitive dependencies and passes them to the BuildDependencies object.
+ */
 public class ApplyBuildDependenciesTask extends DefaultTask {
 
     private final BuildDependencies buildDependencies;
 
+    /**
+     * Constructor for the task.
+     * Initializes the task and configures the logic to apply build dependencies.
+     */
     @Inject
     public ApplyBuildDependenciesTask() {
         final ProjectArchitectureDescriptionExtension extension = this.getProject().getExtensions()

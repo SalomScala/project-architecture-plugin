@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -15,6 +15,15 @@ package de.salomscala.projectarchitectureplugin.plugin.dimensionsatisfier;
 
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Element;
 
+/**
+ * Interface for conditions that check whether an element belongs to a dimension.
+ */
 public interface DimensionSatisfier {
+    /**
+     * Checks whether the specified element satisfies the condition.
+     *
+     * @param dependency The element to check.
+     * @return {@code true} if the element satisfies the condition, otherwise {@code false}.
+     */
     boolean approves(final Element dependency);
 }

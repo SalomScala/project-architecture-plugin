@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -27,24 +27,47 @@ import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependency;
 import de.salomscala.projectarchitectureplugin.plugin.dimensions.Dimension;
 import de.salomscala.projectarchitectureplugin.plugin.dimensions.Dimensions;
 
+/**
+ * Container for all architecture rules of the project.
+ * Allows defining permissions and prohibitions between dimensions.
+ */
 public class Rules {
     private final Dimensions dimensions;
     private final List<Rule> rules = new ArrayList<>();
 
+    /**
+     * Constructor for the rules.
+     *
+     * @param dimensions The available dimensions for referencing in rules.
+     */
     @Inject
     public Rules(final Dimensions dimensions) {
         this.dimensions = dimensions;
     }
 
+    /**
+     * Forbids dependencies from one dimension to another.
+     *
+     * @param dim1 Name of the starting dimension.
+     * @param dim2 Name of the target dimension.
+     */
     public void forbidDimension(final String dim1, final String dim2) {
         this.rules.add(
                 new ForbidRule(this.dimensions.getDimensionByName(dim1), this.dimensions.getDimensionByName(dim2)));
     }
 
+    /**
+     * Forbids dependencies between all currently defined dimensions.
+     */
     public void forbidAllDimensions() {
         this.rules.add(new ForbidAllRule(this.dimensions.getAll()));
     }
 
+    /**
+     * Forbids dependencies between a selection of dimensions.
+     *
+     * @param dimensions The names of the dimensions that must not have dependencies among themselves.
+     */
     public void forbidAllDimensions(final String... dimensions) {
         final List<String> dims = Arrays.asList(dimensions);
         final Set<Dimension> dimSet = dims.stream().map(this.dimensions::getDimensionByName)
@@ -52,6 +75,13 @@ public class Rules {
         this.rules.add(new ForbidAllRule(dimSet));
     }
 
+    /**
+     * Explicitly allows dependencies from one dimension to another.
+     * Permissions override prohibitions.
+     *
+     * @param dim1 Name of the starting dimension.
+     * @param dim2 Name of the target dimension.
+     */
     public void allowDimensions(final String dim1, final String dim2) {
         this.rules
                 .add(new AllowRule(this.dimensions.getDimensionByName(dim1), this.dimensions.getDimensionByName(dim2)));
@@ -64,10 +94,20 @@ public class Rules {
         return builder.toString();
     }
 
+    /**
+     * Applies all defined rules.
+     */
     public void apply() {
         this.rules.forEach((final Rule r) -> r.apply());
     }
 
+    /**
+     * Checks the passed dependencies against the defined rules.
+     * Throws a {@link ForbiddenDependencyException} if forbidden dependencies are found
+     * that are not covered by an allowance rule.
+     *
+     * @param dependencies The dependencies to check.
+     */
     public void check(final Dependencies dependencies) {
         final Set<Dependency> forbiddenDependencies = new LinkedHashSet<>();
         final Set<Dependency> allowedDependencies = new LinkedHashSet<>();

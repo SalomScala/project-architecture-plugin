@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -17,13 +17,27 @@ import java.util.Set;
 
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependency;
 
+/**
+ * Exception thrown when forbidden dependencies are found in the project.
+ */
 public final class ForbiddenDependencyException extends RuntimeException {
     private static final long serialVersionUID = 8003030628963621353L;
 
+    /**
+     * Constructor for the exception.
+     *
+     * @param forbiddenDependencies The set of found forbidden dependencies.
+     */
     public ForbiddenDependencyException(final Set<Dependency> forbiddenDependencies) {
         super(errorMessag(forbiddenDependencies));
     }
 
+    /**
+     * Creates a detailed error message from the set of forbidden dependencies.
+     *
+     * @param forbiddenDependencies The set of forbidden dependencies.
+     * @return The formatted error message.
+     */
     private static String errorMessag(final Set<Dependency> forbiddenDependencies) {
         final StringBuilder builder = new StringBuilder("The build contains the following forbidden dependencies:\r\n");
         forbiddenDependencies

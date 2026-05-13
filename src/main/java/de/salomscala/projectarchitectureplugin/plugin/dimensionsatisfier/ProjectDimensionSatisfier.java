@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -17,13 +17,33 @@ import org.gradle.api.Project;
 
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.ProjectElement;
 
+/**
+ * A satisfier that works directly on the Gradle Project object.
+ */
 public abstract class ProjectDimensionSatisfier extends ProjectDependencyDimensionSatisfier {
+    /**
+     * Default constructor.
+     */
+    protected ProjectDimensionSatisfier() {
+    }
 
+    /**
+     * Checks a {@link ProjectElement} by extracting the Gradle project.
+     *
+     * @param dependency The project element to check.
+     * @return {@code true} if the project satisfies the condition.
+     */
     @Override
     public boolean approves(final ProjectElement dependency) {
         return this.approvesProject(dependency.getProject());
     }
 
+    /**
+     * Abstract method for checking a Gradle project.
+     *
+     * @param project The Gradle project to check.
+     * @return {@code true} if the project satisfies the condition.
+     */
     public abstract boolean approvesProject(Project project);
 
 }

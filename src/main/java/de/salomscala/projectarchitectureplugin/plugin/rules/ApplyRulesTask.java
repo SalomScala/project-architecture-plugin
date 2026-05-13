@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,10 +20,17 @@ import org.gradle.api.Task;
 
 import de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionExtension;
 
+/**
+ * Task for applying (calculating) the defined architecture rules.
+ */
 public class ApplyRulesTask extends DefaultTask {
 
     private final Rules rules;
 
+    /**
+     * Constructor for the task.
+     * Initializes the task and configures the logic for applying rules.
+     */
     @Inject
     public ApplyRulesTask() {
         final ProjectArchitectureDescriptionExtension extension = this.getProject().getExtensions()

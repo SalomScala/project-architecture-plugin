@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,6 +20,9 @@ import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependencies;
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependency;
 import de.salomscala.projectarchitectureplugin.plugin.dimensions.Dimension;
 
+/**
+ * A rule that explicitly forbids dependencies between two dimensions.
+ */
 public class ForbidRule implements Rule {
 
     private final Dimension dim1;
@@ -27,6 +30,12 @@ public class ForbidRule implements Rule {
 
     private final Set<Dependency> edges = new LinkedHashSet<>();
 
+    /**
+     * Constructor for a prohibition rule between two dimensions.
+     *
+     * @param dim1 The starting dimension.
+     * @param dim2 The target dimension.
+     */
     public ForbidRule(final Dimension dim1, final Dimension dim2) {
         this.dim1 = dim1;
         this.dim2 = dim2;
@@ -43,6 +52,10 @@ public class ForbidRule implements Rule {
         return builder.toString();
     }
 
+    /**
+     * Applies the rule by marking all possible dependencies between the dimensions
+     * as forbidden.
+     */
     @Override
     public void apply() {
         final Dimension firstDim = this.dim1;
@@ -51,6 +64,13 @@ public class ForbidRule implements Rule {
         forbid(firstDim, secondDim, forbiddenEdges);
     }
 
+    /**
+     * Static helper method to mark all dependencies between two dimensions as forbidden.
+     *
+     * @param firstDim The starting dimension.
+     * @param secondDim The target dimension.
+     * @param forbiddenEdges The set in which the forbidden dependencies are collected.
+     */
     public static void forbid(final Dimension firstDim, final Dimension secondDim,
             final Set<Dependency> forbiddenEdges) {
         firstDim.getDependencies().forEach((a) -> {
@@ -60,11 +80,22 @@ public class ForbidRule implements Rule {
         });
     }
 
+    /**
+     * Returns the forbidden dependencies defined by this rule.
+     *
+     * @return The set of forbidden {@link Dependencies}.
+     */
     @Override
     public Dependencies getForbiddenDependencies() {
         return new Dependencies(this.edges);
     }
 
+    /**
+     * Returns the allowed dependencies.
+     * Since this is a prohibition rule, an empty set is returned.
+     *
+     * @return Empty {@link Dependencies}.
+     */
     @Override
     public Dependencies getAllowedDependencies() {
         return new Dependencies(new LinkedHashSet<>());

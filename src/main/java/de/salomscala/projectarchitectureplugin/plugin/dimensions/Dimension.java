@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -24,6 +24,10 @@ import de.salomscala.projectarchitectureplugin.plugin.dimensionsatisfier.Dimensi
 import de.salomscala.projectarchitectureplugin.plugin.dimensionsatisfier.ProjectDimensionSatisfier;
 import de.salomscala.projectarchitectureplugin.plugin.dimensionsatisfier.ProjectNamePatternDimensionSatisfier;
 
+/**
+ * Represents an architectural dimension (e.g., "API", "Impl", "Common").
+ * A dimension groups elements based on certain conditions (satisfiers).
+ */
 public class Dimension {
 
     private final String name;
@@ -31,10 +35,20 @@ public class Dimension {
     private final List<DimensionSatisfier> satisfiers = new ArrayList<>();
     private final Set<Element> dependencies = new LinkedHashSet<>();
 
+    /**
+     * Constructor for a dimension.
+     *
+     * @param name The name of the dimension.
+     */
     public Dimension(final String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the name of the dimension.
+     *
+     * @return The name as a string.
+     */
     public String getName() {
         return this.name;
     }
@@ -50,20 +64,41 @@ public class Dimension {
         return builder.toString();
     }
 
+    /**
+     * Adds a satisfier that recognizes projects based on a name pattern.
+     *
+     * @param srcPattern The regular expression pattern for the project name.
+     */
     public void projectNamePattern(final String srcPattern) {
         this.satisfiers.add(new ProjectNamePatternDimensionSatisfier(srcPattern));
     }
 
+    /**
+     * Adds a custom project satisfier.
+     *
+     * @param satisfier The implementation of the {@link ProjectDimensionSatisfier}.
+     */
     public void projectCondition(final ProjectDimensionSatisfier satisfier) {
         this.satisfiers.add(satisfier);
     }
 
+    /**
+     * Applies the dimension to a set of elements.
+     * Elements accepted by at least one satisfier are assigned to this dimension.
+     *
+     * @param dependenciesSoFar The elements to check.
+     */
     public void apply(final Set<? extends Element> dependenciesSoFar) {
         dependenciesSoFar.stream().filter(
                 (final Element d) -> this.satisfiers.stream().anyMatch((final DimensionSatisfier s) -> s.approves(d)))
                 .forEach(this.dependencies::add);
     }
 
+    /**
+     * Returns the elements assigned to this dimension.
+     *
+     * @return A collection of {@link Element} instances.
+     */
     public Collection<Element> getDependencies() {
         return this.dependencies;
     }

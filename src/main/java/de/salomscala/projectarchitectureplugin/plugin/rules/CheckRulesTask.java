@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,11 +20,18 @@ import org.gradle.api.DefaultTask;
 import de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionExtension;
 import de.salomscala.projectarchitectureplugin.plugin.builddependencies.BuildDependencies;
 
+/**
+ * Task for checking the actual build dependencies against the defined rules.
+ */
 public class CheckRulesTask extends DefaultTask {
 
     private final Rules rules;
     private final BuildDependencies buildDependencies;
 
+    /**
+     * Constructor for the task.
+     * Initializes the task and configures the logic for rule checking.
+     */
     @Inject
     public CheckRulesTask() {
         final ProjectArchitectureDescriptionExtension extension = this.getProject().getExtensions()

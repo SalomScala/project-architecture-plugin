@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -19,14 +19,32 @@ import java.util.Set;
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependencies;
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependency;
 
+/**
+ * Manages the actual build dependencies of the project.
+ */
 public class BuildDependencies {
+    /**
+     * Default constructor.
+     */
+    public BuildDependencies() {
+    }
 
     private final Set<Dependency> actualBuildDependencies = new LinkedHashSet<>();
 
+    /**
+     * Adds the specified dependencies to the actual build dependencies.
+     *
+     * @param dependencies The dependencies to add.
+     */
     public void apply(final Dependencies dependencies) {
         this.actualBuildDependencies.addAll(dependencies.getDependencies());
     }
 
+    /**
+     * Returns the collected actual build dependencies.
+     *
+     * @return A {@link Dependencies} object containing the current dependencies.
+     */
     public Dependencies getActualBuildDependencies() {
         return new Dependencies(this.actualBuildDependencies);
     }

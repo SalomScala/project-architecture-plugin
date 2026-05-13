@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,19 @@
  *******************************************************************************/
 package de.salomscala.projectarchitectureplugin.plugin.dependencies;
 
+/**
+ * Represents a directed dependency between two elements (from -> to).
+ */
 public class Dependency {
     private final Element from;
     private final Element to;
 
+    /**
+     * Constructor for a dependency.
+     *
+     * @param from The starting element of the dependency.
+     * @param to The target element of the dependency.
+     */
     public Dependency(final Element from, final Element to) {
         super();
         this.from = from;
@@ -38,10 +47,20 @@ public class Dependency {
                 && !(this.to != null ? !this.to.equals(pair.to) : pair.to != null);
     }
 
+    /**
+     * Returns the starting element of the dependency.
+     *
+     * @return The {@link Element} from which the dependency originates.
+     */
     public Element getFrom() {
         return this.from;
     }
 
+    /**
+     * Returns the target element of the dependency.
+     *
+     * @return The {@link Element} at which the dependency points.
+     */
     public Element getTo() {
         return this.to;
     }

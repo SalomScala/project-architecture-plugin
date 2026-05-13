@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -15,10 +15,27 @@ package de.salomscala.projectarchitectureplugin.plugin.rules;
 
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependencies;
 
+/**
+ * Interface for architecture rules.
+ * A rule defines allowed and forbidden dependencies.
+ */
 public interface Rule {
+    /**
+     * Applies the rule and calculates the affected dependencies.
+     */
     public abstract void apply();
 
+    /**
+     * Returns the dependencies defined as forbidden by this rule.
+     *
+     * @return The forbidden {@link Dependencies}.
+     */
     public abstract Dependencies getForbiddenDependencies();
 
+    /**
+     * Returns the dependencies explicitly defined as allowed by this rule.
+     *
+     * @return The allowed {@link Dependencies}.
+     */
     public abstract Dependencies getAllowedDependencies();
 }

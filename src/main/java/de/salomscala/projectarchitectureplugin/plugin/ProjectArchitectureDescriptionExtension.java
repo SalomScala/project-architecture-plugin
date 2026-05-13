@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,11 +20,20 @@ import de.salomscala.projectarchitectureplugin.plugin.builddependencies.BuildDep
 import de.salomscala.projectarchitectureplugin.plugin.dimensions.Dimensions;
 import de.salomscala.projectarchitectureplugin.plugin.rules.Rules;
 
+/**
+ * The Gradle extension for project architecture description.
+ * Allows the configuration of dimensions, rules, and build dependencies.
+ */
 public class ProjectArchitectureDescriptionExtension {
     private final Dimensions dimensions;
     private final Rules rules;
     private final BuildDependencies buildDependencies;
 
+    /**
+     * Constructor for the extension.
+     *
+     * @param objectFactory The Gradle {@link ObjectFactory} for creating objects.
+     */
     @javax.inject.Inject
     public ProjectArchitectureDescriptionExtension(final ObjectFactory objectFactory) {
         this.dimensions = objectFactory.newInstance(Dimensions.class);
@@ -32,22 +41,47 @@ public class ProjectArchitectureDescriptionExtension {
         this.buildDependencies = objectFactory.newInstance(BuildDependencies.class);
     }
 
+    /**
+     * Configures the architecture dimensions.
+     *
+     * @param action The configuration action for {@link Dimensions}.
+     */
     public void dimensions(final Action<Dimensions> action) {
         action.execute(this.dimensions);
     }
 
+    /**
+     * Configures the architecture rules.
+     *
+     * @param action The configuration action for {@link Rules}.
+     */
     public void rules(final Action<Rules> action) {
         action.execute(this.rules);
     }
 
+    /**
+     * Returns the configured dimensions.
+     *
+     * @return The {@link Dimensions} instance.
+     */
     public Dimensions getDimensions() {
         return this.dimensions;
     }
 
+    /**
+     * Returns the configured architecture rules.
+     *
+     * @return The {@link Rules} instance.
+     */
     public Rules getRules() {
         return this.rules;
     }
 
+    /**
+     * Returns the configured build dependencies.
+     *
+     * @return The {@link BuildDependencies} instance.
+     */
     public BuildDependencies getBuildDependencies() {
         return this.buildDependencies;
     }

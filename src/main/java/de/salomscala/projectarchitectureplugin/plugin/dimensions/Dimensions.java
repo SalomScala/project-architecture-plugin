@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -23,10 +23,24 @@ import org.gradle.api.Action;
 
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Element;
 
+/**
+ * Container for all defined dimensions of the project.
+ */
 public class Dimensions {
+    /**
+     * Default constructor.
+     */
+    public Dimensions() {
+    }
 
     private final Map<String, Dimension> dimensions = new LinkedHashMap<>();
 
+    /**
+     * Defines a new dimension or configures an existing one.
+     *
+     * @param name The name of the dimension.
+     * @param action The configuration action for the {@link Dimension}.
+     */
     public void dimension(final String name, final Action<Dimension> action) {
         Dimension dimension = this.dimensions.get(name);
         if (dimension == null) {
@@ -36,6 +50,12 @@ public class Dimensions {
         action.execute(dimension);
     }
 
+    /**
+     * Searches for a dimension by its name.
+     *
+     * @param name The name of the searched dimension.
+     * @return The {@link Dimension} instance or {@code null} if none exists with this name.
+     */
     public Dimension getDimensionByName(final String name) {
         return this.dimensions.get(name);
     }
@@ -48,10 +68,20 @@ public class Dimensions {
         return builder.toString();
     }
 
+    /**
+     * Applies all defined dimensions to a set of elements.
+     *
+     * @param dependenciesSoFar The elements to check.
+     */
     public void apply(final Set<? extends Element> dependenciesSoFar) {
         this.dimensions.values().forEach((final Dimension d) -> d.apply(dependenciesSoFar));
     }
 
+    /**
+     * Returns all defined dimensions.
+     *
+     * @return A collection of all {@link Dimension} objects.
+     */
     public Collection<Dimension> getAll() {
         return this.dimensions.values();
     }

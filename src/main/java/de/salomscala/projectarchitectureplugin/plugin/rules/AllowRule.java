@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -20,6 +20,9 @@ import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependencies;
 import de.salomscala.projectarchitectureplugin.plugin.dependencies.Dependency;
 import de.salomscala.projectarchitectureplugin.plugin.dimensions.Dimension;
 
+/**
+ * A rule that explicitly allows dependencies between two dimensions.
+ */
 public class AllowRule implements Rule {
 
     private final Dimension dim1;
@@ -27,6 +30,12 @@ public class AllowRule implements Rule {
 
     private final Set<Dependency> edges = new LinkedHashSet<>();
 
+    /**
+     * Constructor for an allowance rule.
+     *
+     * @param dim1 The starting dimension.
+     * @param dim2 The target dimension.
+     */
     public AllowRule(final Dimension dim1, final Dimension dim2) {
         this.dim1 = dim1;
         this.dim2 = dim2;
@@ -43,17 +52,32 @@ public class AllowRule implements Rule {
         return builder.toString();
     }
 
+    /**
+     * Applies the rule by marking all possible combinations of elements between
+     * the two dimensions as allowed.
+     */
     @Override
     public void apply() {
         this.dim1.getDependencies()
                 .forEach((a) -> this.dim2.getDependencies().forEach((b) -> this.edges.add(new Dependency(a, b))));
     }
 
+    /**
+     * Returns the forbidden dependencies.
+     * Since this is an allowance rule, an empty set is returned.
+     *
+     * @return Empty {@link Dependencies}.
+     */
     @Override
     public Dependencies getForbiddenDependencies() {
         return new Dependencies();
     }
 
+    /**
+     * Returns the dependencies allowed by this rule.
+     *
+     * @return The set of allowed {@link Dependencies}.
+     */
     @Override
     public Dependencies getAllowedDependencies() {
         return new Dependencies(this.edges);

@@ -13,27 +13,40 @@
  *******************************************************************************/
 
 plugins {
-    id 'com.gradle.plugin-publish' version '0.9.4'
+    id 'com.gradle.plugin-publish' version '1.3.1'
     id 'java-gradle-plugin'
-    id 'nebula.facet' version '4.0.1'
-    id 'nebula.info' version '3.7.1'
-    id 'nebula.source-jar' version '8.0.0'
-    id 'nebula.javadoc-jar' version '8.0.0'
-    id 'nebula.maven-publish' version '8.0.0'
-    id "com.jfrog.bintray" version "1.8.1" //1.8.2
-    
+    id 'com.netflix.nebula.facet' version '13.1.2'
+    id 'com.netflix.nebula.info' version '16.2.1'
+    id 'com.netflix.nebula.source-jar' version '23.1.0'
+    id 'com.netflix.nebula.javadoc-jar' version '23.1.0'
+    id 'com.netflix.nebula.maven-publish' version '23.1.0'
+    id 'signing'
 }
 
-defaultTasks 'clean', 'javadoc', 'test', 'check', 'assemble'
+group = 'de.salomscala.projectarchitectureplugin'
+version = '0.4'
 
-
+apply plugin: 'java'
 apply plugin: 'eclipse'
 
-group = 'de.salomscala.projectarchitectureplugin'
-version = 0.3
+repositories {
+    mavenCentral()
+}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 eclipse {
     classpath {
@@ -42,36 +55,51 @@ eclipse {
     }
 }
 
-description 'Gradle plugin for providing rules for the architecture of project dependencies'
+description = 'Gradle plugin for providing rules for the architecture of project dependencies'
 
-bintray {
-    user = project.hasProperty('bintray.user') ? project.property('bintray.user') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintray.key') ? project.property('bintray.key') : System.getenv('BINTRAY_KEY')
-    publications = ['nebula']
-    pkg {
-        repo = 'Projects'
-        name = 'projectarchitectureplugin'
-        desc  = "${project.description}"
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/SalomScala/project-architecture-plugin.git'
-        websiteUrl = 'https://github.com/SalomScala/project-architecture-plugin'
-        issueTrackerUrl = 'https://github.com/SalomScala/project-architecture-plugin/issues'
-        publicDownloadNumbers = true
-        githubRepo = 'SalomScala/project-architecture-plugin'
-        githubReleaseNotesFile = 'README.md'
-        version {
-            name = "${project.version}"
-            desc = 'Test Version'
-            released  = new Date()
+tasks.withType(ProcessResources).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+gradlePlugin {
+    website = 'https://github.com/mschultchen/project-architecture-plugin'
+    vcsUrl = 'https://github.com/mschultchen/project-architecture-plugin.git'
+    plugins {
+        simplePlugin {
+            id = 'projectarchitectureplugin'
+            displayName = 'Project Architecture Plugin'
+            description = project.description
+            implementationClass = 'de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionPlugin'
+            tags = ['architecture', 'dependencies', 'rules', 'gradle-plugin']
         }
     }
 }
 
-gradlePlugin {
-    plugins {
-        simplePlugin {
-            id = 'projectarchitectureplugin'
-            implementationClass = 'de.salomscala.projectarchitectureplugin.plugin.ProjectArchitectureDescriptionPlugin'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'Project Architecture Plugin'
+                description = project.description
+                url = 'https://github.com/SalomScala/project-architecture-plugin'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/SalomScala/project-architecture-plugin.git'
+                    developerConnection = 'scm:git:ssh://github.com/SalomScala/project-architecture-plugin.git'
+                    url = 'https://github.com/SalomScala/project-architecture-plugin'
+                }
+            }
         }
     }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask("publish") }
+    sign publishing.publications.mavenJava
 }

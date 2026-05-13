@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright  2018 Marius Schultchen
+ * Copyright  2026 Marius Schultchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -13,6 +13,9 @@
  *******************************************************************************/
 package de.salomscala.projectarchitectureplugin.plugin.dependencies;
 
+/**
+ * Base interface for all elements that can occur in dependencies.
+ */
 public interface Element {
 
 }
